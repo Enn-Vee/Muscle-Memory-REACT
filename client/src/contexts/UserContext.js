@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 export const UserContext = React.createContext();
@@ -7,10 +7,15 @@ export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
 
     const  fetchUser = async () => {
-        let userInfo = await axios.get('http://localhost:3001/user', {
+        try {
+            let userInfo = await axios.get('http://localhost:3001/user', {
             withCredentials:true
-        });
-        setUser(userInfo.data);
+            });
+            setUser(userInfo.data);
+        }
+        catch(err) {
+            console.log(err);
+        }
     }
 
     const logOut = async () => {
@@ -19,6 +24,9 @@ export function UserProvider({ children }) {
         })
         .then(res => {
             fetchUser();
+        })
+        .catch(err => {
+            console.log(err);
         })
     }
 

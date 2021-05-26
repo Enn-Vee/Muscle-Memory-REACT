@@ -12,18 +12,15 @@ const MySQLStore = require('express-mysql-session')(session);
 const cors = require('cors');
 const cookieParser = require('cookie-parser')
 
-
-
-
 /* MIDDLEWARE */
 const app = express();
 app.use(cors({
     origin: "http://localhost:3000",
     credentials: true
 }));
-app.use(cookieParser(process.env.SESSION_SECRET));
+//app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }))
+//app.use(express.urlencoded({ extended: false }))
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -45,6 +42,7 @@ passport.use(new localStrat((username,password, done) => {
                 if(err)
                     done(err);
                 if(check)  {
+                    delete results[0].password;
                     return done(null, results[0]);
                 }
                 return done(null, false);
@@ -75,8 +73,11 @@ passport.deserializeUser((id, done) => {
     db.query('SELECT * FROM users WHERE id=?', [id], (error, result, field) => {
         if(error)
             done(error);
-        if(result.length > 0)
+        if(result.length > 0) {
+            delete result[0].password;
+            delete result[0].datetime_created;
             done(null, result[0]);
+        }
     })
 })
 
@@ -84,14 +85,15 @@ passport.deserializeUser((id, done) => {
 app.post('/register', async (req, res) => {
     try{
         let username = req.body.username;
+        let email = req.body.email;
         await bcrypt.hash(req.body.password, SALT_ROUNDS, (err, hash) => {
-            db.query('SELECT * FROM users WHERE username=?',[username], (error, results, field) => {
+            db.query('SELECT * FROM users WHERE username=? OR email=?',[username, email], (error, results, field) => {
                 if(error) 
                     throw error;
                 if(results.length > 0)
                     res.send('taken')
                 else {
-                    db.query('INSERT INTO users (username, password) VALUES(?,?)', [username,hash], (e, r, f) => {
+                    db.query('INSERT INTO users (username, password, email) VALUES(?,?,?)', [username, hash, email], (e, r, f) => {
                         if(e)
                             throw e;
                         res.send('success');
@@ -115,8 +117,9 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
 })
 
 app.get('/user', (req, res) => {
-    if(req.user)
+    if(req.user) {
         res.send(req.user);
+    }
     else 
         res.send(null);
 })

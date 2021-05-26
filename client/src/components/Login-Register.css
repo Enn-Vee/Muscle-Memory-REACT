@@ -38,3 +38,8 @@
 #submission-form {
   margin: 3vh auto 0 auto;
 }
+
+.error-message {
+  position: absolute;
+  font-size: 0.7rem;
+}

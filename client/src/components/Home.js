@@ -13,7 +13,7 @@ function Home() {
     return (
         <div className="container-fluid">
             <section id="landing-page">
-            <NavBar />
+                <NavBar />
                 <div id ="landing-content">
                     <h1 className="site-name">Muscle Memory</h1>
                     <p>Submit individual exercises and make customized workout regimens!</p>
@@ -35,7 +35,7 @@ function Home() {
             </section>
             <section id="about" className="text-center">
                 <div className="">
-                    <h1><i class="fas fa-dumbbell"></i>What is Muscle Memory?<i class="fas fa-dumbbell"></i></h1>
+                    <h1><i className="fas fa-dumbbell"></i>What is Muscle Memory?<i className="fas fa-dumbbell"></i></h1>
                     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tenetur dolore eaque exercitationem possimus aperiam facilis dignissimos quia, illum similique? Veniam.</p>
                 </div>
             </section>            
