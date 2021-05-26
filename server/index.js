@@ -81,7 +81,6 @@ passport.deserializeUser((id, done) => {
 })
 
 /* ROUTES */
-
 app.post('/register', async (req, res) => {
     try{
         let username = req.body.username;

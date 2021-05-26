@@ -1,0 +1,14 @@
+.container-fluid {
+  padding: 0;
+}
+
+html,
+body,
+header,
+#App {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
