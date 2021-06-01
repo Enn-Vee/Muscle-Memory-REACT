@@ -44,4 +44,25 @@ Exercise.getAll = (result) => {
     })
 }
 
+Exercise.like = (id, result) => {
+    db.query('UPDATE exercise SET likes = likes + 1 WHERE id=?', id, (error, res) => {
+        if(error) {
+            result(error, null);
+            return;
+        }
+        result(null, res);
+    })
+}
+
+Exercise.unlike = (id, result) => {
+    db.query('UPDATE exercise SET likes = likes - 1 WHERE id=?', id, (error, res) => {
+        if(error) {
+            result(error, null);
+            return;
+        }
+        result(null, res);
+    })
+}
+
+
 module.exports= Exercise;

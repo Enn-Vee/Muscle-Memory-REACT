@@ -1,6 +1,7 @@
-const authenticate = () => async (req, res, next) => {
+const authenticate = (passport) => async (req, res, next) => {
+    console.log(req.isAuthenticated());
     if(req.isAuthenticated())
-        next();
+        return next();
     else 
         res.status(401).send('not logged in')
 }
