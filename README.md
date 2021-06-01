@@ -37,8 +37,8 @@
   `password` VARCHAR(32) NOT NULL,
   `create_time` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP);``
   
-9) Run the backend using the command `node index.js`
-10) Run the frontend using the command `npm start`
+9) Run the backend using the command `node index.js` in the /server/ folder.
+10) Run the frontend using the command `npm start` in the /client/ folder.
 11) Visit http://localhost:3000/
 
 If it does not work, make sure that the backend, frontend, and the database are running in different ports and that the names are properly configured in the .env file.
