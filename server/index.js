@@ -2,127 +2,41 @@
 const dotenv = require('dotenv');
 dotenv.config({path: './.env'});
 const express = require('express');
-const mysql = require('mysql');
-const bcrypt = require('bcrypt');
-const SALT_ROUNDS = 10;
-const passport = require('passport');
-const localStrat = require('passport-local').Strategy;
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
 const cors = require('cors');
-const cookieParser = require('cookie-parser')
+const passport = require('passport')
 
 /* MIDDLEWARE */
+require('./configs/passport-config.js');
 const app = express();
+
+const whitelist = ['http://127.0.0.1:3000', 'http://localhost:3000']
 app.use(cors({
-    origin: "http://localhost:3000",
+    /*origin: function(origin, callback) {
+        if(whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        }
+        else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    },*/
     credentials: true
 }));
-//app.use(cookieParser(process.env.SESSION_SECRET));
+
 app.use(express.json());
-//app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({extended:true}))
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge:1000*60*60*24
+        maxAge:1000*60*60*24 //Cookie lasts for 1 day.
     }
 }))
-
-passport.use(new localStrat((username,password, done) => {
-    db.query('SELECT * from users WHERE username=?',[username], async (error, results, fields) => {
-        if(error)
-            done(error);
-        if(results.length === 0){
-            return done(null, false);
-        }
-        try {
-            await bcrypt.compare(password, results[0].password, (err, check) => {
-                if(err)
-                    done(err);
-                if(check)  {
-                    delete results[0].password;
-                    return done(null, results[0]);
-                }
-                return done(null, false);
-            })
-        }
-        catch(e) {
-            console.log(e);
-        }
-    })
-}))
-
 app.use(passport.initialize());
 app.use(passport.session());
 
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_SECRET,
-    database: process.env.DB
-})
-db.connect();
-
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-})
-
-passport.deserializeUser((id, done) => { 
-    db.query('SELECT * FROM users WHERE id=?', [id], (error, result, field) => {
-        if(error)
-            done(error);
-        if(result.length > 0) {
-            delete result[0].password;
-            delete result[0].datetime_created;
-            done(null, result[0]);
-        }
-    })
-})
-
-/* ROUTES */
-app.post('/register', async (req, res) => {
-    try{
-        let username = req.body.username;
-        let email = req.body.email;
-        await bcrypt.hash(req.body.password, SALT_ROUNDS, (err, hash) => {
-            db.query('SELECT * FROM users WHERE username=? OR email=?',[username, email], (error, results, field) => {
-                if(error) 
-                    throw error;
-                if(results.length > 0)
-                    res.send('taken')
-                else {
-                    db.query('INSERT INTO users (username, password, email) VALUES(?,?,?)', [username, hash, email], (e, r, f) => {
-                        if(e)
-                            throw e;
-                        res.send('success');
-                    })
-                }
-            })
-        });      
-    }
-    catch(e) {
-        console.log(e);
-    }
-})
-
-app.get('/logout', async (req,res) => {
-    req.logOut();
-    res.send('logged out');
-})
-
-app.post('/login', passport.authenticate('local'), (req, res) => {
-    res.send(req.user)
-})
-
-app.get('/user', (req, res) => {
-    if(req.user) {
-        res.send(req.user);
-    }
-    else 
-        res.send(null);
-})
+app.use(require("./routes/")(passport));
 
 /* SERVER START*/
 app.listen(process.env.PORT || 4000, (err) =>{
