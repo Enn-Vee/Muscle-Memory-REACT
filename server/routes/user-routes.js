@@ -1,5 +1,6 @@
-const validate = require('../middlewares/validate-middleware')
+const validate = require('../middlewares/validate-middleware.js')
 const registrationSchema = require('../validations/registration-schema')
+const checkUserExistence = require('../middlewares/checkUserExistence-middleware.js')
 const users = require("../controllers/user-controller.js");
 
 module.exports = passport => {
@@ -7,6 +8,10 @@ module.exports = passport => {
     const router = express.Router();
 
     router.get('/', users.getAll)
+    router.get('/:username/liked/', checkUserExistence(), users.getAllLikedExercises)
+    router.get('/:username/liked/:exerciseId', checkUserExistence(), users.getOneLikedExercise) //Check if a user has liked a specific exercise.
+    router.get('/check/:username', users.getByUsername)
+    router.get('/check/:email', users.getByEmail)
     router.post('/login', passport.authenticate('local'), users.logIn)
     router.post('/logout', users.logOut)
     router.post('/', validate(registrationSchema), users.register)
@@ -14,18 +19,3 @@ module.exports = passport => {
 
     return router;
 }
-
-/*(app, express, passport) => {
-    const users = require("../controllers/users-controller.js");
-    onst router = express.Router();
-    app.route('/users')
-    .get()
-    .post()
-    .put()
-    .patch()
-    .delete()
-
-    router.post('/register', validate(validationSchemas.registrationSchema), users.registerUser)
-    router.post('/login', passport.authenticate('local'), users.logIn)
-    router.get('/user',users.getCurrentUser) //Check if a user is logged in
-}*/

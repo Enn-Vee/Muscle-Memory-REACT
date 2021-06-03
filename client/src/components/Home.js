@@ -10,6 +10,10 @@ function Home() {
 
     const {user, logOut} = useContext(UserContext);
 
+    useEffect(() => {
+        document.title = "Muscle Memory | Home"
+    },[])
+
     return (
         <div className="container-fluid">
             <section id="landing-page">
@@ -20,14 +24,15 @@ function Home() {
                     {user ? <>
                         <h3>Welcome back, {user.username}!</h3> 
                         <hr className="separator" />
-                        <a className="btn btn-outline-light btn-lg" href="#">Start Browsing</a><br></br>
+                        <Link to={{pathname: "/main"}} className="btn btn-outline-light btn-lg" href="#">Start Browsing</Link>
+                        <br />
                         <button onClick={logOut}className="btn btn-outline-light btn-small mt-3">Log Out</button>
                     </>:
                     <>
                         <Link to={{pathname: "/register"}} className="btn btn-outline-light landing-link" href="#">Sign Up</Link>
                         <Link to={{pathname: "/login"}} className="btn btn-outline-light landing-link" href="#">Log In</Link>
                         <hr className="separator" />
-                        <a className="btn btn-outline-light btn-lg" href="#">Continue as Guest</a>
+                        <Link to={{pathname: "/main"}} className="btn btn-outline-light btn-lg" href="#">Continue as Guest</Link>
                     </>}
                     
 

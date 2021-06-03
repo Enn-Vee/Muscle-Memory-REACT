@@ -28,11 +28,11 @@ passport.use(new LocalStrat((username,password, done) => {
 }))
 
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user.user_id);
 })
 
-passport.deserializeUser((id, done) => { 
-    db.query('SELECT * FROM users WHERE id=?', [id], (error, result, field) => {
+passport.deserializeUser((userId, done) => { 
+    db.query('SELECT * FROM users WHERE user_id=?', [userId], (error, result, field) => {
         if(error)
             done(error);
         if(result.length > 0) {

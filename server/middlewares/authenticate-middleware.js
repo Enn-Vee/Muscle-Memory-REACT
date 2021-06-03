@@ -1,5 +1,5 @@
+/* Checks whether or not the user is currently logged in */
 const authenticate = (passport) => async (req, res, next) => {
-    console.log(req.isAuthenticated());
     if(req.isAuthenticated())
         return next();
     else 

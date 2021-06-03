@@ -36,6 +36,61 @@ exports.getAll = (req, res) => {
     })
 }
 
+/* Sends a list of all exercises a user has liked.*/
+exports.getAllLikedExercises = (req, res) => {
+    let username = req.params.username
+    User.getAllLikedExercises(username, (error, result) => {
+        if(error)
+            res.status(500).send({
+                message: error.message
+            })
+        else if(result.length > 0)
+            res.send(result);
+        else 
+            res.send('User has not liked any exercises.')
+    })
+}
+
+/* Checks if user has liked a specific exercise. Sends exercise details if liked. Otherwise, sends false.*/
+exports.getOneLikedExercise = (req, res) => {
+    let username = req.params.username
+    let exerciseId = req.params.exerciseId
+    User.getOneLikedExercise(username, exerciseId, (error, result) => {
+        if(error)
+            res.status(500).send({
+                message: error.message
+            })
+        else if(result.length > 0)
+            res.send(true);
+        else 
+            res.send(false)
+    })
+}
+
+exports.getByUsername = (req, res) => {
+    const username = req.params.username
+    User.getByUsername(username,(error, result) => {
+        if(error)
+            res.status(500).send({
+                message: error.message
+            });
+        else
+            res.send(result);
+    })
+}
+
+exports.getByEmail = (req, res) => {
+    const email= req.params.email
+    User.getByEmail(email,(error, result) => {
+        if(error)
+            res.status(500).send({
+                message: error.message
+            });
+        else
+            res.send(result);
+    })
+}
+
 exports.getCurrentUser = (req, res) => {
     if(req.user)
         res.send(req.user);

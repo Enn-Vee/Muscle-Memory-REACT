@@ -25,7 +25,7 @@ const registrationSchema = yup.object().shape({
     .test('Duplicate E-Mail Error', registrationErrors.duplicateEmail , async email => {
         const checkDuplicateEmail = () => {
             return new Promise((resolve, reject) => {
-                db.query('SELECT id FROM users WHERE email=?', email, (error, result) => {
+                db.query('SELECT user_id FROM users WHERE email=?', email, (error, result) => {
                     if(error)
                         reject(err);
                     resolve(result);
@@ -49,10 +49,10 @@ const registrationSchema = yup.object().shape({
     .min(6, registrationErrors.shortUsername)
     .max(12, registrationErrors.longUsername)
     .test('Duplicate Username Error', registrationErrors.duplicateUsername, async (username)  => {
-
+        
         const checkDuplicateUsername = () => {
             return new Promise((resolve, reject) => {
-                db.query('SELECT id FROM users WHERE username=?', username, (error, result) => {
+                db.query('SELECT user_id FROM users WHERE username=?', username, (error, result) => {
                     if(error)
                         reject(err);
                     resolve(result);

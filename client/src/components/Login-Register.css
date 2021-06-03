@@ -39,6 +39,11 @@
   margin: 3vh auto 0 auto;
 }
 
+.valid-message {
+  position: absolute;
+  font-size: 0.7rem;
+}
+
 .error-message {
   position: absolute;
   font-size: 0.7rem;

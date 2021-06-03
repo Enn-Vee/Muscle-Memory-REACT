@@ -8,8 +8,9 @@ export function UserProvider({ children }) {
 
     const  fetchUser = async () => {
         try {
-            let userInfo = await axios.get('http://localhost:3001/user', {
-            withCredentials:true
+            let userInfo = await axios.get('http://localhost:3001/users/currentUser', {
+                //"Access-Control-Allow-Origin": true,
+                withCredentials:true
             });
             setUser(userInfo.data);
         }
@@ -19,10 +20,11 @@ export function UserProvider({ children }) {
     }
 
     const logOut = async () => {
-        await axios.get('http://localhost:3001/logout', {
-            withCredentials:true
+        await axios.post('http://localhost:3001/users/logOut', {}, {
+            withCredentials: true
         })
         .then(res => {
+            console.log(res)
             fetchUser();
         })
         .catch(err => {

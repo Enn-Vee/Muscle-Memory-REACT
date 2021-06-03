@@ -1,3 +1,4 @@
+/* Checks whether the user input conforms to the respective schema */
 const validate = (schema) => async (req, res, next) => {
     try {
         await schema.validate(req.body);

@@ -1,4 +1,5 @@
 import * as yup from 'yup'
+import axios from 'axios'
 
 const errors = {
     invalidEmail: 'Must enter a valid e-mail address.',
@@ -14,8 +15,44 @@ const errors = {
 }
 
 export const registrationSchema = yup.object().shape({
-    email: yup.string().email(errors.invalidEmail).required(errors.noEmail),
-    username: yup.string().min(6, errors.shortUsername).max(12, errors.longUsername).required(errors.noUsername),
-    password: yup.string().min(6, errors.shortPassword).max(18, errors.longPassword).required(errors.noPassword),
-    confirmPassword: yup.string().oneOf([yup.ref('password'), null], errors.wrongConfirm).required(errors.noConfirm)
+    email: yup
+    .string()
+    .email(errors.invalidEmail)
+    .test('emailDuplicateCheck', 'E-Mail already in use.', async email => {
+        return await axios.get(`http://localhost:3001/users/check/${email}`, { email: email })
+        .then(res => {
+            if(res.data.length > 0)
+                return false;
+            return true;
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    })
+    .required(errors.noEmail),
+    username: yup
+    .string()
+    .min(6, errors.shortUsername)
+    .max(12, errors.longUsername)
+    .test('usernameDuplicateCheck', 'Username already taken!', async username => {
+        return await axios.get(`http://localhost:3001/users/check/${username}`)
+        .then(res => {
+            if(res.data.length > 0)
+                return false;
+            return true;
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    })
+    .required(errors.noUsername),
+    password: yup
+    .string()
+    .min(6, errors.shortPassword)
+    .max(18, errors.longPassword)
+    .required(errors.noPassword),
+    confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password'), null], errors.wrongConfirm)
+    .required(errors.noConfirm)
 })

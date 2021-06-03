@@ -32,8 +32,8 @@
   margin-bottom: 0.8rem;
 }
 
-.navbar {
-  padding: 4vh 16vw 0;
+#home-navbar {
+  padding-top: 4vw;
   font-size: 1.3rem;
 }
 .navbar-brand {
