@@ -1,11 +1,15 @@
-/* Checks whether the user input conforms to the respective schema */
+/**
+ * Validates whether the input by the user conforms to the given schema.
+ * @param {Object} schema - Yup validation schema containing the constraints of the form.
+ * @returns 
+ */
 const validate = (schema) => async (req, res, next) => {
     try {
         await schema.validate(req.body);
-        return next();
+        next();
     }
     catch (error) {
-        return res.status(400).json(error)
+        res.status(400).json(error)
     }
 }
 

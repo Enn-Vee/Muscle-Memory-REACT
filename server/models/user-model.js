@@ -2,16 +2,25 @@ const db = require('./database.js')
 const bcrypt = require('bcrypt');
 const SALT_ROUNDS = 10;
 
+/**
+ * User Constructor
+ * @param {Object} user 
+ */
 const User = function(user) {
     this.username = user.username;
     this.email = user.email;
     this.password = user.password;
 }
 
+/**
+ * Registers a new user into the database.
+ * @param {User} newUser 
+ * @param {Function} result 
+ */
 User.register = async (newUser, result) => {
     let username = newUser.username;
     let email =  newUser.email;
-    await bcrypt.hash(newUser.password, SALT_ROUNDS, (error, hash) => {
+    await bcrypt.hash(newUser.password, SALT_ROUNDS, (error, hash) => { //Hash passwords before storing into database.
         newUser.password = hash;
         db.query('INSERT INTO users (username, email, password) VALUES(?,?,?)', [username, email, hash], (error, res) => {
             if(error) {
@@ -24,6 +33,10 @@ User.register = async (newUser, result) => {
     })
 }
 
+/**
+ * Gets all users in the database.
+ * @param {Function} result 
+ */
 User.getAll = result => {
     db.query("SELECT id, username, email FROM users", (error, res) => {
         if(error) {
@@ -35,6 +48,11 @@ User.getAll = result => {
     })
 }
 
+/**
+ * Checks if username is taken.
+ * @param {String} username 
+ * @param {Function} result 
+ */
 User.getByUsername = (username, result) => {
     db.query("SELECT username FROM users WHERE username=?", [username], (error, res) => {
         if(error) {
@@ -46,6 +64,11 @@ User.getByUsername = (username, result) => {
     })
 }
 
+/**
+ * Checks if email is taken.
+ * @param {String} email 
+ * @param {Function} result 
+ */
 User.getByEmail = (email, result) => {
     db.query("SELECT email FROM users WHERE email=?", [email], (error, res) => {
         if(error) {
@@ -57,6 +80,11 @@ User.getByEmail = (email, result) => {
     })
 }
 
+/**
+ * Gets details of the user with the given ID.
+ * @param {Number} id 
+ * @param {Function} result 
+ */
 User.findByID = (id , result) => {
     db.query('SELECT id, username, email FROM users WHERE id=?', id, (error, res) => {
         if(error) {
@@ -68,6 +96,11 @@ User.findByID = (id , result) => {
     })
 } 
 
+/**
+ * Gets all the exercises that a user of the given username liked.
+ * @param {String} username 
+ * @param {Function} result 
+ */
 User.getAllLikedExercises = (username, result) => {
     db.query('SELECT title,\
         target_muscle,\
@@ -91,6 +124,12 @@ User.getAllLikedExercises = (username, result) => {
     })
 }
 
+/**
+ * Checks if a user has liked a specific exercise.
+ * @param {String} username 
+ * @param {Number} exerciseId 
+ * @param {Function} result 
+ */
 User.getOneLikedExercise = (username, exerciseId, result) => {
     db.query('SELECT title,\
         target_muscle,\
@@ -114,6 +153,11 @@ User.getOneLikedExercise = (username, exerciseId, result) => {
     })
 }
 
+/**
+ * Removes user from the database.
+ * @param {Number} id 
+ * @param {Function} result 
+ */
 User.remove = (id, result) => {
     db.query("DELETE FROM users WHERE id=?", id, (error, result) => {
         if(error) {

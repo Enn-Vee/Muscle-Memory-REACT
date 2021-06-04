@@ -3,7 +3,7 @@ const authenticate = require('../middlewares/authenticate-middleware.js')
 const exerciseSchema = require('../validations/exercise-schema.js')
 const exercises = require("../controllers/exercise-controller.js");
 
-/* Routes for /exercises. */
+/* Exercise routes */
 module.exports = passport => {
     const express = require('express');
     const router = express.Router();

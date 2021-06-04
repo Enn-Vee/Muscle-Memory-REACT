@@ -1,7 +1,10 @@
 const db = require('./database.js')
 const utils = require('../utils/utils.js')
 
-/* EXERCISE CONSTRUCTOR */
+/**
+ * Constructs a class Exercise using the given JavaScript Object.
+ * @param {Object} exercise - Exercise Constructor 
+ */
 const Exercise = function(exercise) {
     this.author_id = exercise.author_id;
     this.title = exercise.title;
@@ -13,7 +16,11 @@ const Exercise = function(exercise) {
     this.video_id = utils.getVideoID(exercise.video_url); //Parses the URL for the youtube video ID.
 }
 
-/* Add new exercise to the database */
+/**
+ * Inserts an exercise into the MySQL database.
+ * @param {Exercise} newExercise - Exercise to insert.
+ * @param {Function} result
+ */
 Exercise.createExercise = (newExercise, result) => {
     db.query('INSERT INTO exercise (author_id, title, target_muscle, description, sets, reps, duration, video_id) VALUES(?,?,?,?,?,?,?,?)',
     [newExercise.author_id, newExercise.title, newExercise.target_muscle, newExercise.description, newExercise.sets, newExercise.reps, newExercise.duration, newExercise.video_id],
@@ -26,7 +33,10 @@ Exercise.createExercise = (newExercise, result) => {
     })
 }
 
-/* Retrieve all exercises */
+/**
+ * Gets all exercises in the database.
+ * @param {Function} result
+ */
 Exercise.getAll = (result) => {
     db.query('SELECT\
     exercise_id,\
@@ -45,7 +55,11 @@ Exercise.getAll = (result) => {
     })
 }
 
-/* Find an exercise by its name */
+/**
+ * Finds the exercise of the given title
+ * @param {String} title - Name of the exercise to find.
+ * @param {Function} result
+ */
 Exercise.getByTitle = (title, result) => {
     db.query('SELECT * FROM exercise WHERE title=?', title, (error, res) => {
         if(error) {
@@ -56,6 +70,11 @@ Exercise.getByTitle = (title, result) => {
     })
 }
 
+/**
+ * Gets all exercises submitted by a user.
+ * @param {String} username - Username to find exercises for
+ * @param {Function} result
+ */
 Exercise.getByUser = (username, result) => {
     db.query('SELECT\
     exercise_id,\
@@ -75,7 +94,12 @@ Exercise.getByUser = (username, result) => {
     })
 }
 
-/* Increments the "likes" column of the specificied exercise by one and adds which userId liked what exerciseId in the database*/
+/**
+ * Inserts an entry into the database .
+ * @param {Number} exerciseId - ID of the exercise the user has liked.
+ * @param {Number} userId - ID of the user that liked the exercise.
+ * @param {Function} result
+ */
 Exercise.like = (exerciseId, userId, result) => {
     db.query('UPDATE exercise\
     SET likes = likes + 1\
@@ -89,7 +113,12 @@ Exercise.like = (exerciseId, userId, result) => {
     })
 }
 
-/* Decrements the "likes" column of the specificied exercise by one and removes which userId liked what exerciseId in the database */
+/**
+ * 
+ * @param {Number} exerciseId - ID of the exercise the user unliked.
+ * @param {Number} userId - ID of the user that unliked the exercise.
+ * @param {Function} result 
+ */
 Exercise.unlike = (exerciseId, userId, result) => {
     db.query('UPDATE exercise\
     SET likes = likes - 1\

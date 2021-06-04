@@ -1,7 +1,11 @@
-/* Checks whether or not the user is currently logged in */
+/**
+ * 
+ * @param {Passport} passport 
+ * @returns 
+ */
 const authenticate = (passport) => async (req, res, next) => {
     if(req.isAuthenticated())
-        return next();
+        next();
     else 
         res.status(401).send('not logged in')
 }

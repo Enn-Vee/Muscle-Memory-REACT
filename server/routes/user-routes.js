@@ -3,6 +3,7 @@ const registrationSchema = require('../validations/registration-schema')
 const checkUserExistence = require('../middlewares/checkUserExistence-middleware.js')
 const users = require("../controllers/user-controller.js");
 
+/* User route */
 module.exports = passport => {
     const express = require('express');
     const router = express.Router();
@@ -12,8 +13,6 @@ module.exports = passport => {
     router.get('/:username/liked/:exerciseId', checkUserExistence(), users.getOneLikedExercise) //Check if a user has liked a specific exercise.
     router.get('/check/:username', users.getByUsername)
     router.get('/check/:email', users.getByEmail)
-    router.post('/login', passport.authenticate('local'), users.logIn)
-    router.post('/logout', users.logOut)
     router.post('/', validate(registrationSchema), users.register)
     router.get('/currentUser', users.getCurrentUser)
 

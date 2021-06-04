@@ -1,6 +1,8 @@
 const db = require('../models/database.js')
 
-/* Checks whether the user input conforms to the respective schema */
+/**
+ * Checks if username is already taken.
+ */
 const checkUserExistence = () => async (req, res, next) => {
     let username = req.params.username
     db.query('SELECT username FROM users WHERE username=?', [username], (error, results) => {

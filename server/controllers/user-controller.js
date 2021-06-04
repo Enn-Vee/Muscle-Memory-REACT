@@ -1,5 +1,10 @@
 const User = require('../models/user-model.js')
 
+/**
+ * Calls the getByID method of the exercise model which gets an exercise by its ID.
+ * @param {express.Request} req - Must have username, email, and password in its body.
+ * @param {express.Response} res 
+ */
 exports.register = (req, res) => {
     const user = new User({
         username: req.body.username,
@@ -16,15 +21,30 @@ exports.register = (req, res) => {
     })
 }
 
+/**
+ * Logs the user out. Invalidates the session ID.
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
 exports.logOut = (req, res) => {
     req.logOut();
     res.send('logged out');
 }
 
+/**
+ * Confirms that the middleware that authenticates the user has succeeded.
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
 exports.logIn = (req, res) => {
     res.send('logged in');
 }
 
+/**
+ * Calls the getAll method of the user model which gets the information of all users in the database.
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
 exports.getAll = (req, res) => {
     User.getAll((error,result) => {
         if(error)
@@ -36,7 +56,11 @@ exports.getAll = (req, res) => {
     })
 }
 
-/* Sends a list of all exercises a user has liked.*/
+/**
+ * Calls the getAllLikedExercises method of the user model which gets the information of all exercises that the user has liked.
+ * @param {express.Request} req - Must contain a username in the URI parameter.
+ * @param {express.Response} res 
+ */
 exports.getAllLikedExercises = (req, res) => {
     let username = req.params.username
     User.getAllLikedExercises(username, (error, result) => {
@@ -51,7 +75,11 @@ exports.getAllLikedExercises = (req, res) => {
     })
 }
 
-/* Checks if user has liked a specific exercise. Sends exercise details if liked. Otherwise, sends false.*/
+/**
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
 exports.getOneLikedExercise = (req, res) => {
     let username = req.params.username
     let exerciseId = req.params.exerciseId
@@ -67,6 +95,11 @@ exports.getOneLikedExercise = (req, res) => {
     })
 }
 
+/**
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
 exports.getByUsername = (req, res) => {
     const username = req.params.username
     User.getByUsername(username,(error, result) => {
@@ -79,6 +112,11 @@ exports.getByUsername = (req, res) => {
     })
 }
 
+/**
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
 exports.getByEmail = (req, res) => {
     const email= req.params.email
     User.getByEmail(email,(error, result) => {
@@ -91,6 +129,11 @@ exports.getByEmail = (req, res) => {
     })
 }
 
+/**
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
 exports.getCurrentUser = (req, res) => {
     if(req.user)
         res.send(req.user);
