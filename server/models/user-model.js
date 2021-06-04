@@ -110,8 +110,8 @@ User.getAllLikedExercises = (username, result) => {
         video_id,\
         liked_at\
     FROM exercise_likes\
-    JOIN exercise\
-        ON exercise_likes.exercise_id = exercise.exercise_id\
+    JOIN exercises\
+        ON exercise_likes.exercise_id = exercises.exercise_id\
     JOIN users\
         ON exercise_likes.user_id = users.user_id\
     WHERE username=?', username, (error, res) => {
@@ -139,8 +139,8 @@ User.getOneLikedExercise = (username, exerciseId, result) => {
         video_id,\
         liked_at\
     FROM exercise_likes\
-    JOIN exercise\
-        ON exercise_likes.exercise_id = exercise.exercise_id\
+    JOIN exercises\
+        ON exercise_likes.exercise_id = exercises.exercise_id\
     JOIN users\
         ON exercise_likes.user_id = users.user_id\
     WHERE username=? AND exercise_likes.exercise_id=?', [username,exerciseId], (error, res) => {

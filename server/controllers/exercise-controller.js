@@ -100,7 +100,7 @@ exports.like = (req, res) => {
                 message: error.message
             });
         else {
-            res.send(true);
+            res.send('liked');
         }
     })
 }
@@ -120,7 +120,7 @@ exports.unlike = (req, res) => {
                 message: error.message
             });
             else {
-                res.send(false);
+                res.send('unliked');
             }
     })
 }

@@ -27,7 +27,7 @@ const exerciseSchema = yup.object().shape({
          */
         const checkDuplicateTitle = () => {
             return new Promise((resolve, reject) => {
-                db.query('SELECT exercise_id FROM exercise WHERE title=?', title, (error, result) => {
+                db.query('SELECT exercise_id FROM exercises WHERE title=?', title, (error, result) => {
                     if(error) {
                         reject(err);
                     }

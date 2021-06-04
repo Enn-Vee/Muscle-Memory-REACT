@@ -20,7 +20,7 @@ export function UserProvider({ children }) {
     }
 
     const logOut = async () => {
-        await axios.post('http://localhost:3001/users/logOut', {}, {
+        await axios.post('http://localhost:3001/logOut', {}, {
             withCredentials: true
         })
         .then(res => {

@@ -17,7 +17,7 @@ function LogIn() {
 
   const logIn = async (info) => {
     await axios
-      .post("http://localhost:3001/users/logIn", info, {
+      .post("http://localhost:3001/logIn", info, {
           //"Access-Control-Allow-Origin": true,
           withCredentials:true
         }

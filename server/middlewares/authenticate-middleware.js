@@ -1,6 +1,6 @@
 /**
  * 
- * @param {Passport} passport 
+ * @param {Object} passport 
  * @returns 
  */
 const authenticate = (passport) => async (req, res, next) => {
