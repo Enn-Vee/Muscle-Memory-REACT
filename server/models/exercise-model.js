@@ -34,12 +34,15 @@ Exercise.createExercise = (newExercise, result) => {
 }
 
 /**
- * Gets all exercises in the database.
- * @param {Object} params - Filter and Sort conditions.
- * @param {Function} result
+ * Gets all exercises of the given options.
+ * @param {String} sortOption 
+ * @param {String} filters 
+ * @param {String} pagination 
+ * @param {Function} result 
  */
-Exercise.getAll = (filters, pagination, result) => {
+Exercise.getAll = (sortOption, filters, pagination, result) => {
     let query = "SELECT\
+    exercises.created_at,\
     exercise_id,\
     username AS author,\
     title, target_muscle,\
@@ -48,7 +51,8 @@ Exercise.getAll = (filters, pagination, result) => {
     video_id\
     FROM exercises\
     JOIN users ON exercises.author_id = users.user_id WHERE 1=1";
-    query += filters; //Query parameters.
+    query += filters; //Filtering
+    query += sortOption; //Sorting
     query += pagination; //Pagination
     db.query(query, (error, res) => {
         if(error) {
@@ -99,7 +103,7 @@ Exercise.getByUser = (username, result) => {
 }
 
 /**
- * Inserts an entry into the database .
+ * Likes an exercise
  * @param {Number} exerciseId - ID of the exercise the user has liked.
  * @param {Number} userId - ID of the user that liked the exercise.
  * @param {Function} result
@@ -108,7 +112,7 @@ Exercise.like = (exerciseId, userId, result) => {
     db.query('UPDATE exercises\
     SET likes = likes + 1\
     WHERE exercise_id=?;\
-    INSERT INTO exercise_likes (user_id, exercise_id) VALUES(?,?)', [userId, userId, exerciseId], (error, res) => {
+    INSERT INTO exercise_likes (user_id, exercise_id) VALUES(?,?)', [exerciseId, userId, exerciseId], (error, res) => {
         if(error) {
             result(error, null);
             return;
@@ -118,7 +122,7 @@ Exercise.like = (exerciseId, userId, result) => {
 }
 
 /**
- * 
+ * Unlikes an exercise.
  * @param {Number} exerciseId - ID of the exercise the user unliked.
  * @param {Number} userId - ID of the user that unliked the exercise.
  * @param {Function} result 
@@ -127,7 +131,7 @@ Exercise.unlike = (exerciseId, userId, result) => {
     db.query('UPDATE exercises\
     SET likes = likes - 1\
     WHERE exercise_id=?;\
-    DELETE FROM exercise_likes WHERE user_id=? AND exercise_id=?', [userId, userId, exerciseId], (error, res) => {
+    DELETE FROM exercise_likes WHERE user_id=? AND exercise_id=?', [exerciseId, userId, exerciseId], (error, res) => {
         if(error) {
             console.log(error);
             result(error, null);
@@ -136,5 +140,21 @@ Exercise.unlike = (exerciseId, userId, result) => {
         result(null, res);
     })
 }
+
+/**
+ * Gets the number of likes from an exercise.
+ * @param {Number} exerciseId 
+ * @param {Function} result 
+ */
+Exercise.getNumLikes = (exerciseId, result) => {
+    db.query('SELECT likes FROM exercises WHERE exercise_id=?', exerciseId, (error, res) => {
+        if(error) {
+            console.log(error);
+            result(error, null);
+            return;
+        }
+        result(null, res);
+    })
+} 
 
 module.exports= Exercise;

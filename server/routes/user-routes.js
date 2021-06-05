@@ -1,5 +1,6 @@
 const validate = require('../middlewares/validate-middleware.js')
 const registrationSchema = require('../validations/registration-schema')
+const exerciseSchema = require('../validations/exercise-schema')
 const checkUserExistence = require('../middlewares/checkUserExistence-middleware.js')
 const users = require("../controllers/user-controller.js");
 
@@ -9,7 +10,7 @@ module.exports = passport => {
     const router = express.Router();
 
     router.get('/', users.getAll)
-    router.get('/:username/liked/', checkUserExistence(), users.getAllLikedExercises)
+    router.get('/:username/liked/', checkUserExistence(), validate.query(exerciseSchema.exerciseParameterSchema),users.getAllLikedExercises)
     router.get('/:username/liked/:exerciseId', checkUserExistence(), users.getOneLikedExercise)
     router.get('/check/:username', users.getByUsername)
     router.get('/check/:email', users.getByEmail)

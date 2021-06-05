@@ -1,4 +1,5 @@
-const User = require('../models/user-model.js')
+const User = require('../models/user-model.js');
+const mysql = require("mysql");
 
 /**
  * Calls the getByID method of the exercise model which gets an exercise by its ID.
@@ -64,6 +65,13 @@ exports.getAll = (req, res) => {
 exports.getAllLikedExercises = (req, res) => {
     let username = req.params.username;
 
+    /* SORTING */
+    let sortOption = "";
+    if(req.query.sort)
+        sortOption += " ORDER BY " + mysql.escapeId(req.query.sort);
+    if(req.query.order)
+        sortOption += " DESC"
+    
     /* Filtering using query parameters */
     let filters = "";
     if(req.query.target_muscle)
@@ -83,7 +91,7 @@ exports.getAllLikedExercises = (req, res) => {
             pagination += " OFFSET " + offset;
         }
     }
-    User.getAllLikedExercises(username, filters, pagination, (error, result) => {
+    User.getAllLikedExercises(username, sortOption, filters, pagination, (error, result) => {
         if(error)
             res.status(500).send({
                 message: error.message

@@ -1,11 +1,12 @@
-let mysql = require('mysql');
+const mysql = require('mysql');
+const dotenv = require('dotenv')
 
 let dbName = "muscle_memory";
 
 let db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: ""
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD
 });
 
 db.query(`CREATE SCHEMA ${dbName}`, (error, result) => { //Create database

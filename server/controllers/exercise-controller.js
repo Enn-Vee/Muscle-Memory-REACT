@@ -43,6 +43,14 @@ exports.createExercise = (req, res) => {
  * @param {express.Response} res 
  */
 exports.getAll = (req, res) => {
+
+    /* SORTING */
+    let sortOption = "";
+    if(req.query.sort)
+        sortOption += " ORDER BY " + mysql.escapeId(req.query.sort);
+    if(req.query.order)
+        sortOption += " DESC"   
+
     /* Filter using query parameter */
     let filters = "";
     if(req.query.target_muscle)
@@ -63,7 +71,7 @@ exports.getAll = (req, res) => {
         }
     }
     
-    Exercise.getAll(filters, pagination, (error, result) => {
+    Exercise.getAll(sortOption, filters, pagination, (error, result) => {
         if(error)
             res.status(500).send({
                 message: error.message
@@ -141,8 +149,21 @@ exports.unlike = (req, res) => {
             res.status(500).send('already liked',{
                 message: error.message
             });
-            else {
-                res.send('unliked');
-            }
+        else {
+            res.send('unliked');
+        }
+    })
+}
+
+exports.getNumLikes = (req, res) => {
+    let exerciseId = req.params.id;
+    Exercise.getNumLikes(exerciseId, (error, result) => {
+        if(error)
+        res.status(500).send('already liked',{
+            message: error.message
+        });
+        else {
+            res.send(result);
+        }
     })
 }

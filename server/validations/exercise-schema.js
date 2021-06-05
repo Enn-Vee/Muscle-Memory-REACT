@@ -79,7 +79,12 @@ const exerciseSchema = yup.object().shape({
     .required() 
 })
 
-const exerciseFilterSchema = yup.object().shape({
+/* QUERY PARAMETERS */
+
+const validSortingFields = ['target_muscle', 'created_at', 'duration', 'title', 'likes']
+
+const exerciseParameterSchema = yup.object().shape({
+    sort: yup.string().oneOf(validSortingFields, errors.illegalInput),
     target_muscle: yup.string().oneOf(muscleGroupList, errors.illegalInput),
     min_duration: yup.number().moreThan(0),
     page: yup.number().moreThan(0),
@@ -87,4 +92,4 @@ const exerciseFilterSchema = yup.object().shape({
 })
 
 exports.exerciseSchema = exerciseSchema;
-exports.exerciseFilterSchema = exerciseFilterSchema;
+exports.exerciseParameterSchema = exerciseParameterSchema;
