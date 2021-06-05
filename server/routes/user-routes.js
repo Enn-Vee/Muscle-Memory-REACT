@@ -10,10 +10,10 @@ module.exports = passport => {
 
     router.get('/', users.getAll)
     router.get('/:username/liked/', checkUserExistence(), users.getAllLikedExercises)
-    router.get('/:username/liked/:exerciseId', checkUserExistence(), users.getOneLikedExercise) //Check if a user has liked a specific exercise.
+    router.get('/:username/liked/:exerciseId', checkUserExistence(), users.getOneLikedExercise)
     router.get('/check/:username', users.getByUsername)
     router.get('/check/:email', users.getByEmail)
-    router.post('/', validate(registrationSchema), users.register)
+    router.post('/', validate.body(registrationSchema), users.register)
     router.get('/currentUser', users.getCurrentUser)
 
     return router;

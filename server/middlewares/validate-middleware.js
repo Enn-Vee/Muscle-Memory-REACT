@@ -3,7 +3,7 @@
  * @param {Object} schema - Yup validation schema containing the constraints of the form.
  * @returns 
  */
-const validate = (schema) => async (req, res, next) => {
+exports.body = (schema) => async (req, res, next) => {
     try {
         await schema.validate(req.body);
         next();
@@ -11,6 +11,19 @@ const validate = (schema) => async (req, res, next) => {
     catch (error) {
         res.status(400).json(error)
     }
-}
+};
 
-module.exports = validate;
+/**
+ * Validates whether the parameters given by the user conforms to the given schema.
+ * @param {Object} schema - Yup validation schema containing the constraints
+ * @returns 
+ */
+exports.query = (schema) => async (req, res, next) => {
+    try {
+        await schema.validate(req.query);
+        next();
+    }
+    catch (error) {
+        res.status(400).json(error)
+    }
+};

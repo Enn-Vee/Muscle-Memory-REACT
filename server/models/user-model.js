@@ -101,8 +101,8 @@ User.findByID = (id , result) => {
  * @param {String} username 
  * @param {Function} result 
  */
-User.getAllLikedExercises = (username, result) => {
-    db.query('SELECT title,\
+ User.getAllLikedExercises = (username, filters, pagination, result) => {
+    let query = "SELECT title,\
         target_muscle,\
         sets,\
         reps,\
@@ -114,7 +114,10 @@ User.getAllLikedExercises = (username, result) => {
         ON exercise_likes.exercise_id = exercises.exercise_id\
     JOIN users\
         ON exercise_likes.user_id = users.user_id\
-    WHERE username=?', username, (error, res) => {
+    WHERE username=?";
+    query += filters; //Query parameters
+    query += pagination; //Pagination
+    db.query(query, username, (error, res) => {
         if(error) {
             console.log("error: ", error)
             result(error, null);

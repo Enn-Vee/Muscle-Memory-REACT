@@ -79,4 +79,12 @@ const exerciseSchema = yup.object().shape({
     .required() 
 })
 
-module.exports = exerciseSchema;
+const exerciseFilterSchema = yup.object().shape({
+    target_muscle: yup.string().oneOf(muscleGroupList, errors.illegalInput),
+    min_duration: yup.number().moreThan(0),
+    page: yup.number().moreThan(0),
+    limit: yup.number().moreThan(0)
+})
+
+exports.exerciseSchema = exerciseSchema;
+exports.exerciseFilterSchema = exerciseFilterSchema;

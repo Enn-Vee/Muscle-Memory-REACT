@@ -1,4 +1,6 @@
+const mysql = require('mysql');
 const Exercise = require('../models/exercise-model.js')
+const utils = require('../utils/utils.js');
 
 /**
  * Calls the getByID method of the exercise model which gets an exercise by its ID.
@@ -41,13 +43,33 @@ exports.createExercise = (req, res) => {
  * @param {express.Response} res 
  */
 exports.getAll = (req, res) => {
-    Exercise.getAll((error, result) => {
+    /* Filter using query parameter */
+    let filters = "";
+    if(req.query.target_muscle)
+        filters += " AND target_muscle=" + mysql.escape(req.query.target_muscle);
+    if(req.query.min_duration)
+        filters += " AND duration>=" + mysql.escape(req.query.min_duration)
+    if(req.query.max_duration)
+        filters += " AND duration<=" + mysql.escape(req.query.max_duration)
+
+    /* Pagination */
+    let pagination = "";
+    if(req.query.limit) {
+        let limit = parseInt(req.query.limit);
+        pagination += " LIMIT " + req.query.limit
+        if(req.query.page) {
+            let offset = (parseInt(req.query.page)-1) * limit;
+            pagination += " OFFSET " + offset;
+        }
+    }
+    
+    Exercise.getAll(filters, pagination, (error, result) => {
         if(error)
             res.status(500).send({
                 message: error.message
             });
         else
-            res.send(result);
+            res.send(result);       
     })
 }
 

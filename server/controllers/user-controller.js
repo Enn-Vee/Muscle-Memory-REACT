@@ -62,8 +62,28 @@ exports.getAll = (req, res) => {
  * @param {express.Response} res 
  */
 exports.getAllLikedExercises = (req, res) => {
-    let username = req.params.username
-    User.getAllLikedExercises(username, (error, result) => {
+    let username = req.params.username;
+
+    /* Filtering using query parameters */
+    let filters = "";
+    if(req.query.target_muscle)
+        filters += " AND target_muscle=" + mysql.escape(req.query.target_muscle);
+    if(req.query.min_duration)
+        filters += " AND duration>=" + mysql.escape(req.query.min_duration)
+    if(req.query.max_duration)
+        filters += " AND duration<=" + mysql.escape(req.query.max_duration)
+
+    /* Pagination */
+    let pagination = "";
+    if(req.query.limit) {
+        let limit = parseInt(req.query.limit);
+        pagination += " LIMIT " + req.query.limit
+        if(req.query.page) {
+            let offset = (parseInt(req.query.page)-1) * limit;
+            pagination += " OFFSET " + offset;
+        }
+    }
+    User.getAllLikedExercises(username, filters, pagination, (error, result) => {
         if(error)
             res.status(500).send({
                 message: error.message

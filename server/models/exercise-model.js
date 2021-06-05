@@ -35,10 +35,11 @@ Exercise.createExercise = (newExercise, result) => {
 
 /**
  * Gets all exercises in the database.
+ * @param {Object} params - Filter and Sort conditions.
  * @param {Function} result
  */
-Exercise.getAll = (result) => {
-    db.query('SELECT\
+Exercise.getAll = (filters, pagination, result) => {
+    let query = "SELECT\
     exercise_id,\
     username AS author,\
     title, target_muscle,\
@@ -46,7 +47,10 @@ Exercise.getAll = (result) => {
     likes,\
     video_id\
     FROM exercises\
-    JOIN users ON exercises.author_id = users.user_id', (error, res) => {
+    JOIN users ON exercises.author_id = users.user_id WHERE 1=1";
+    query += filters; //Query parameters.
+    query += pagination; //Pagination
+    db.query(query, (error, res) => {
         if(error) {
             result(error, null);
             return;
