@@ -1,5 +1,6 @@
 const User = require('../models/user-model.js');
 const mysql = require("mysql");
+const utils = require("../utils/utils.js");
 
 /**
  * Calls the getByID method of the exercise model which gets an exercise by its ID.
@@ -64,33 +65,13 @@ exports.getAll = (req, res) => {
  */
 exports.getAllLikedExercises = (req, res) => {
     let username = req.params.username;
-
     /* SORTING */
-    let sortOption = "";
-    if(req.query.sort)
-        sortOption += " ORDER BY " + mysql.escapeId(req.query.sort);
-    if(req.query.order)
-        sortOption += " DESC"
-    
+    let sortOption = utils.getSortOptions(req.query);
     /* Filtering using query parameters */
-    let filters = "";
-    if(req.query.target_muscle)
-        filters += " AND target_muscle=" + mysql.escape(req.query.target_muscle);
-    if(req.query.min_duration)
-        filters += " AND duration>=" + mysql.escape(req.query.min_duration)
-    if(req.query.max_duration)
-        filters += " AND duration<=" + mysql.escape(req.query.max_duration)
-
+    let filters = utils.getFilters(req.query);
     /* Pagination */
-    let pagination = "";
-    if(req.query.limit) {
-        let limit = parseInt(req.query.limit);
-        pagination += " LIMIT " + req.query.limit
-        if(req.query.page) {
-            let offset = (parseInt(req.query.page)-1) * limit;
-            pagination += " OFFSET " + offset;
-        }
-    }
+    let pagination = utils.getPage(req.query);
+    
     User.getAllLikedExercises(username, sortOption, filters, pagination, (error, result) => {
         if(error)
             res.status(500).send({

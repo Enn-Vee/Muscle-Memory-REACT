@@ -9,7 +9,7 @@ function Main() {
         <div className="">
             <MainNavBar />
             <Switch>
-                <Route default path="/main" component={Exercises} />
+                <Route exact path="/main" component={Exercises} />
                 <Route path="/main/routines" component={Routines} />
             </Switch>
         </div>

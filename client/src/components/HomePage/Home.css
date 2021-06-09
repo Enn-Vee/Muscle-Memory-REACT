@@ -3,7 +3,7 @@
   height: 100vh;
   text-align: center;
   padding: 0px;
-  background-image: url(../images/pexels-victor-freitas-841131.jpg);
+  background-image: url(../../images/pexels-victor-freitas-841131.jpg);
   background-color: black;
   background-size: cover;
   background-position: center;
@@ -32,15 +32,6 @@
   margin-bottom: 0.8rem;
 }
 
-#home-navbar {
-  padding-top: 4vw;
-  font-size: 1.3rem;
-}
-.navbar-brand {
-  font-family: "Bebas Neue";
-  font-size: 2.3rem;
-}
-
 #landing-content {
   position: relative;
   margin-top: 18vh;
@@ -52,10 +43,6 @@
   width: 30%;
   margin-left: auto;
   margin-right: auto;
-}
-
-.landing-link {
-  margin: 1vh 5px 0 5px;
 }
 
 #about {

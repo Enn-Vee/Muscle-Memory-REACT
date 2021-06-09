@@ -5,8 +5,8 @@ const errors = {
     shortTitle: 'Title must have a minimum of 4 characters',
     longTitle: 'Title must have a maximum of 20 characters.',
     noTitle: 'Please enter the name of the exercise.',
-    shortDescription: 'dddddd',
-    longDescription: 'Maximum characters allowed is 18 characters.',
+    shortDescription: 'Description must have a minimum of 64 characters.',
+    longDescription: 'Description must have a maximum of 1024 characters.',
     noDescription: 'Please enter a password',
     illegalInput: 'Please don\'t be cheeky.',
     wrongConfirm: 'Passwords must match.',
@@ -19,7 +19,7 @@ export const exerciseSchema = yup.object().shape({
     title: yup
     .string()
     .min(4, errors.shortTitle)
-    .max(20, errors.longTitle)
+    .max(32, errors.longTitle)
     .test('exerciseDuplicateCheck', 'Title already taken.', async title => {
         return await axios.get(`http://localhost:3001/exercises/${title}`, { title: title })
         .then(res => {
@@ -32,14 +32,14 @@ export const exerciseSchema = yup.object().shape({
         })
     })
     .required(errors.noTitle),
-    muscle_group: yup
+    target_muscle: yup
     .string()
     .oneOf(muscleGroupList, errors.illegalInput)
     .required(),
     description: yup
     .string()
-    .min(255, errors.shortDescription)
-    .max(2000, errors.longDescription)
+    .min(64, errors.shortDescription)
+    .max(1028, errors.longDescription)
     .required(errors.noDescription),
     sets: yup
     .number()

@@ -1,10 +1,10 @@
-import './App.css';
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
-import Home from './components/Home';
-import Main from './components/Main';
-import LogIn from './components/LogIn';
-import Register from './components/Register';
+import Home from './components/HomePage/Home';
+import Main from './components/MainPage/Main';
+import LogIn from './components/Forms/LogIn';
+import Register from './components/Forms/Register';
 import UserProvider from './contexts/UserContext'
+import './App.css'
 
 function App() {
   

@@ -1,14 +1,15 @@
 import React, { useContext } from 'react'
 import {Link} from 'react-router-dom'
-import { UserContext } from '../contexts/UserContext'
+import { UserContext } from '../../contexts/UserContext'
+import '../NavBar.css'
 
 function MainNavBar() {
 
     const {user} = useContext(UserContext);
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light container">
-            <Link to={{pathname: "/home"}}>Muscle Memory</Link>
+        <nav id="navbar" className="navbar navbar-expand-lg navbar-light container">
+            <Link to={{pathname: "/home"}} className="navbar-brand">Muscle Memory</Link>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#links" aria-controls="links" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>

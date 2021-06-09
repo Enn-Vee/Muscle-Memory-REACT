@@ -38,7 +38,7 @@ User.register = async (newUser, result) => {
  * @param {Function} result 
  */
 User.getAll = result => {
-    db.query("SELECT id, username, email FROM users", (error, res) => {
+    db.query("SELECT user_id, username, email, created_at FROM users", (error, res) => {
         if(error) {
             console.log("error: ", error)
             result(error, null);
@@ -139,13 +139,7 @@ User.findByID = (id , result) => {
  * @param {Function} result 
  */
 User.getOneLikedExercise = (username, exerciseId, result) => {
-    db.query('SELECT title,\
-        target_muscle,\
-        sets,\
-        reps,\
-        duration,\
-        video_id,\
-        liked_at\
+    db.query('SELECT liked_at\
     FROM exercise_likes\
     JOIN exercises\
         ON exercise_likes.exercise_id = exercises.exercise_id\

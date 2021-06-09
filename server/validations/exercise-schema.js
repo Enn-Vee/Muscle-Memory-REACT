@@ -85,7 +85,10 @@ const validSortingFields = ['target_muscle', 'created_at', 'duration', 'title', 
 
 const exerciseParameterSchema = yup.object().shape({
     sort: yup.string().oneOf(validSortingFields, errors.illegalInput),
-    target_muscle: yup.string().oneOf(muscleGroupList, errors.illegalInput),
+    target_muscle: yup
+    .array()
+    .nullable()
+    .of(yup.string().oneOf(muscleGroupList, errors.illegalInput)),
     min_duration: yup.number().moreThan(0),
     page: yup.number().moreThan(0),
     limit: yup.number().moreThan(0)

@@ -1,9 +1,7 @@
-import axios from 'axios';
-import React, { useState, useEffect, useContext} from 'react'
-import { UserContext } from '../contexts/UserContext'
+import React, { useEffect, useContext} from 'react'
+import { UserContext } from '../../contexts/UserContext'
 import NavBar from './NavBar';
 import './Home.css'
-import aboutImage from '../images/pexels-tima-miroshnichenko-5750952.jpg'
 import { Link } from 'react-router-dom';
 
 function Home() {
@@ -24,15 +22,15 @@ function Home() {
                     {user ? <>
                         <h3>Welcome back, {user.username}!</h3> 
                         <hr className="separator" />
-                        <Link to={{pathname: "/main"}} className="btn btn-outline-light btn-lg" href="#">Start Browsing</Link>
+                        <Link to={{pathname: "/main"}} className="btn btn-outline-light btn-lg">Start Browsing</Link>
                         <br />
-                        <button onClick={logOut}className="btn btn-outline-light btn-small mt-3">Log Out</button>
+                        <button onClick={logOut}className="btn btn-outline-light btn-small mt-2">Log Out</button>
                     </>:
                     <>
-                        <Link to={{pathname: "/register"}} className="btn btn-outline-light landing-link" href="#">Sign Up</Link>
-                        <Link to={{pathname: "/login"}} className="btn btn-outline-light landing-link" href="#">Log In</Link>
-                        <hr className="separator" />
-                        <Link to={{pathname: "/main"}} className="btn btn-outline-light btn-lg" href="#">Continue as Guest</Link>
+                        <Link to={{pathname: "/register"}} className="btn btn-outline-light">Sign Up</Link>
+                        <Link to={{pathname: "/login"}} className="btn btn-outline-light">Log In</Link>  
+                    <hr className="separator" />
+                    <Link to={{pathname: "/main"}} className="btn btn-outline-light btn-lg">Continue as Guest</Link>
                     </>}
                     
 

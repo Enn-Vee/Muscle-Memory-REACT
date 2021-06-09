@@ -2,8 +2,8 @@ import React, { useContext } from 'react'
 import { Formik, Form, Field, ErrorMessage} from 'formik'
 import FormField from './FormField'
 import axios from 'axios'
-import  {exerciseSchema} from '../validations/ExerciseValidation.js'
-import { UserContext } from '../contexts/UserContext'
+import  {exerciseSchema} from '../../validations/ExerciseValidation.js'
+import { UserContext } from '../../contexts/UserContext'
 import './Login-Register.css'
 
 
@@ -36,7 +36,7 @@ function SubmissionModal() {
                         </div>
                         <Formik initialValues={{
                             title: '',
-                            muscle_group: 'abs',     
+                            target_muscle: 'abs',     
                             description: '',
                             sets: 3,
                             reps: 8,
@@ -55,8 +55,8 @@ function SubmissionModal() {
                                     <div className="modal-body">
                                         <FormField label="Exercise Title" name="title" type="text" placeholder="Enter the name of the exercise..." />
                                         <div className="form-group">
-                                            <label htmlFor="muscle_group">Muscle Group</label>
-                                            <Field name="muscle_group" as="select" className="form-control">
+                                            <label htmlFor="target_muscle">Muscle Group</label>
+                                            <Field name="target_muscle" as="select" className="form-control">
                                                 <option value='abs'>Abs</option>
                                                 <option value='back'>Back</option>
                                                 <option value='legs'>Legs</option>

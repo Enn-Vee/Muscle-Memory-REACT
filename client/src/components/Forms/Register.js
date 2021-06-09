@@ -4,7 +4,7 @@ import axios from 'axios'
 import './Login-Register.css'
 import { Formik, Form, Field } from 'formik'
 import FormField from './FormField'
-import { registrationSchema } from '../validations/RegisterValidation.js'
+import { registrationSchema } from '../../validations/RegisterValidation.js'
 
 function Register() {
 
@@ -20,7 +20,7 @@ function Register() {
             if(res.data === 'taken')
                 console.log('Username already taken');
             else  {
-                history.push('/')
+                history.push('/');
             }
         })
         .catch(err => {

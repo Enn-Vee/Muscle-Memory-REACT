@@ -1,12 +1,12 @@
 import React, { useEffect, useContext } from "react";
 import axios from "axios";
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import {Formik, Form} from 'formik'
 import "./Login-Register.css";
 import FormField from "./FormField";
-import {logInSchema} from "../validations/LogInValidation"
+import {logInSchema} from "../../validations/LogInValidation"
 
 function LogIn() {
   const { user, fetchUser } = useContext(UserContext);

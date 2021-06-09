@@ -45,39 +45,20 @@ exports.createExercise = (req, res) => {
 exports.getAll = (req, res) => {
 
     /* SORTING */
-    let sortOption = "";
-    if(req.query.sort)
-        sortOption += " ORDER BY " + mysql.escapeId(req.query.sort);
-    if(req.query.order)
-        sortOption += " DESC"   
-
+    let sortOption = utils.getSortOptions(req.query);
     /* Filter using query parameter */
-    let filters = "";
-    if(req.query.target_muscle)
-        filters += " AND target_muscle=" + mysql.escape(req.query.target_muscle);
-    if(req.query.min_duration)
-        filters += " AND duration>=" + mysql.escape(req.query.min_duration)
-    if(req.query.max_duration)
-        filters += " AND duration<=" + mysql.escape(req.query.max_duration)
-
+    let filters = utils.getFilters(req.query);
     /* Pagination */
-    let pagination = "";
-    if(req.query.limit) {
-        let limit = parseInt(req.query.limit);
-        pagination += " LIMIT " + req.query.limit
-        if(req.query.page) {
-            let offset = (parseInt(req.query.page)-1) * limit;
-            pagination += " OFFSET " + offset;
-        }
-    }
+    let pagination = utils.getPage(req.query);
     
     Exercise.getAll(sortOption, filters, pagination, (error, result) => {
         if(error)
             res.status(500).send({
                 message: error.message
             });
-        else
-            res.send(result);       
+        else {
+            res.send(result);   
+        }    
     })
 }
 
@@ -129,9 +110,8 @@ exports.like = (req, res) => {
             res.status(500).send({
                 message: error.message
             });
-        else {
+        else
             res.send('liked');
-        }
     })
 }
 
@@ -149,12 +129,16 @@ exports.unlike = (req, res) => {
             res.status(500).send('already liked',{
                 message: error.message
             });
-        else {
+        else 
             res.send('unliked');
-        }
     })
 }
 
+/**
+ * Gets number of likes an exercise has.
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
 exports.getNumLikes = (req, res) => {
     let exerciseId = req.params.id;
     Exercise.getNumLikes(exerciseId, (error, result) => {
@@ -162,8 +146,7 @@ exports.getNumLikes = (req, res) => {
         res.status(500).send('already liked',{
             message: error.message
         });
-        else {
+        else 
             res.send(result);
-        }
     })
 }

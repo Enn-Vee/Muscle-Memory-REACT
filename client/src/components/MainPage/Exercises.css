@@ -1,0 +1,46 @@
+.like-button {
+  color: white;
+  transition: 0.3s;
+  font-size: 1.4rem;
+  font-family: inherit;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  -webkit-text-stroke-width: 0.6px;
+  -webkit-text-stroke-color: black;
+}
+
+.like-button:hover {
+  color: #fb3958;
+}
+
+.is-liked {
+  transition: 0.3s;
+  color: #fb3958 !important;
+}
+
+.is-liked:hover {
+  color: white !important;
+}
+
+.card {
+  width: 100%;
+}
+.content {
+  position: relative;
+  padding-bottom: 2.8rem;
+}
+.content-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-footer {
+  position: absolute;
+  bottom: 0;
+  height: 2.8rem;
+  width: 100%;
+}
+
+.time-details {
+  font-size: 1rem;
+}
