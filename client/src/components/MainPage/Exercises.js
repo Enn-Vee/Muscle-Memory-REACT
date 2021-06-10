@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 import {useLocation, useHistory} from 'react-router-dom'
 import axios from 'axios'
-//import ExerciseSubmissionModal from "../Forms/ExerciseSubmissionModal";
+import ExerciseSubmissionModal from "../Forms/ExerciseSubmissionModal";
+import { UserContext } from '../../contexts/UserContext'
 import {Formik, Form, Field} from 'formik'
 import "./Exercises.css";
 import ExerciseContent from "./ExerciseContent";
@@ -17,11 +18,12 @@ function Exercises() {
   const [hasMore, setHasMore] = useState(true);
   const history = useHistory();
   const lastExerciseRef = useRef();
+  const { user }  = useContext(UserContext);
 
   const lastExerciseCallBack = useCallback(element => {
     if(lastExerciseRef.current) //Has a reference
       lastExerciseRef.current.disconnect()//Remove reference
-    lastExerciseRef.current = new IntersectionObserver(async entries => { 
+    lastExerciseRef.current = new IntersectionObserver(entries => { 
       if(entries[0].isIntersecting && hasMore)
         setPage(page => page + 1);
     })
@@ -54,17 +56,28 @@ function Exercises() {
     setExercises([]);
   }, [params])
 
+  useEffect(() => {
+    setFilters(QueryString.parse(search))
+  }, [search])
+
+
   const handleSubmit = (values) => {
     for(const key in values)
       if(values[key].length === 0 || values[key] === '')
         delete values[key];
+    if(values.sortOrder) {
+      values.sortOrder.replace("\\", "")
+      values.sortOrder = JSON.parse(values.sortOrder)
+      values.sort = values.sortOrder.sort
+      values.order = values.sortOrder.order
+      delete values.sortOrder
+    }
     let query = "?" + new URLSearchParams(values);
-    setFilters(values);
-    setPage(1); 
     history.push({
       pathname: '/main',
       search: query
     })
+    setPage(1); 
   }
 
   const handleDurationChange = (e) => {
@@ -73,18 +86,19 @@ function Exercises() {
   }
 
   return (
-    <div className="container d-flex flex-wrap align-items-start">
-      <div className=" col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3 col-xxl-3"> {/* FILTER FORM */}
+    <div className="container d-flex flex-wrap align-items-start pt-5">
+      <div className=" col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3 col-xxl-3 sticky-xl-top pe-xl-5"> {/* FILTER FORM */}
+        {user ? <ExerciseSubmissionModal /> : null}
         <Formik 
         initialValues={{
           max_duration: 60,
-          target_muscle: [],
+          target_muscle: ["abs", "arms", "back", "legs", "shoulders"],
         }}
         onSubmit = {values => {
           handleSubmit(values);
         }}
         >
-          <Form className="pe-5">
+          <Form className="">
             <h4 className="text-center">Filter</h4>
             <label>Duration</label>
             <Field type="range" className="form-range" name="max_duration" min="1" max="60" step="1"  onInput={e => handleDurationChange(e)}/>
@@ -92,7 +106,7 @@ function Exercises() {
             <div id="checkbox-group">Checked</div>
             <div role="group" aria-labelledby="checkbox-group">
               <label>
-                <Field type="checkbox" name="target_muscle" value="abs"/>
+                <Field type="checkbox" name="target_muscle" value="abs" />
                 Abs
               </label>
               <label>
@@ -111,6 +125,22 @@ function Exercises() {
                 <Field type="checkbox" name="target_muscle" value="shoulders"/>
                 Shoulder
               </label>
+              <label htmlFor="sort">Sort by:</label>
+              <Field as="select" name="sortOrder" className="form-select">
+                <option value='{"sort": "created_at", "order": "desc"}'>Newest</option>
+                <option value='{"sort": "created_at", "order": "asc"}'>Oldest</option>
+                <option value='{"sort": "likes", "order": "desc"}'>Most Liked</option>
+                <option value='{"sort": "likes", "order": "asc"}' >Least Liked</option>
+                <option value='{"sort": "duration", "order": "asc"}' >Duration(Shortest-Longest)</option>
+                <option value='{"sort": "duration", "order": "desc"}' >Duration(Longest-Shortest)</option>
+                <option value='{"sort": "title", "order": "asc"}' >Title(A-Z)</option>
+                <option value='{"sort": "title", "order": "desc"}' >Title(Z-A)</option>
+                <option value='{"sort": "author", "order": "asc"}' >Author Name(A-Z)</option>
+                <option value='{"sort": "author", "order": "desc"}' >Author Name(Z-A)</option>
+                <option value='{"sort": "difficulty", "order": "asc"}' >Least Difficult</option>
+                <option value='{"sort": "difficulty", "order": "desc"}' >Most Difficult</option>
+              </Field >
+              <hr />
               <button type="submit">Filter</button>
            </div>
           </Form>

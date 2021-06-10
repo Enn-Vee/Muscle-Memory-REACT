@@ -2,8 +2,7 @@ import React, { useContext } from 'react'
 import { Formik, Form, Field, ErrorMessage} from 'formik'
 import FormField from './FormField'
 import axios from 'axios'
-import  {exerciseSchema} from '../../validations/ExerciseValidation.js'
-import { UserContext } from '../../contexts/UserContext'
+import  {exerciseSchema} from '../../validations/ExerciseValidation.js' 
 import './Login-Register.css'
 
 
@@ -80,7 +79,6 @@ function SubmissionModal() {
                                     </div>
                                 </Form>
                             )}
-                            
                         </Formik>
                     </div>
                 </div>

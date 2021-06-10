@@ -14,6 +14,7 @@ const errors = {
 }
 
 const muscleGroupList = ['abs', 'back', 'legs', 'shoulders','arms'];
+const validDifficulty = ['very easy', 'easy', 'medium', 'hard', 'very hard']
 
 const exerciseSchema = yup.object().shape({
     title: yup
@@ -76,19 +77,28 @@ const exerciseSchema = yup.object().shape({
     video_url: yup
     .string()
     .matches(/(?:\/|%3D|v=|vi=)([0-9A-z-_]{11})(?:[%#?&]|$)/i, 'Must be a valid youtube link...') //Regex taken from https://gist.github.com/rodrigoborgesdeoliveira/987683cfbfcc8d800192da1e73adc486
-    .required() 
+    .required(),
+    //Difficulty must be in one of the given difficulty categories.
+    difficulty: yup
+    .string()
+    .oneOf(validDifficulty, errors.illegalInput)
+    .required()
 })
 
 /* QUERY PARAMETERS */
 
-const validSortingFields = ['target_muscle', 'created_at', 'duration', 'title', 'likes']
+const validSortingFields = ['target_muscle', 'created_at', 'duration', 'title', 'likes', 'author', 'difficulty']
 
 const exerciseParameterSchema = yup.object().shape({
     sort: yup.string().oneOf(validSortingFields, errors.illegalInput),
+    order: yup.string().oneOf(['asc', 'desc'], errors.illegalInput),
     target_muscle: yup
     .array()
     .nullable()
     .of(yup.string().oneOf(muscleGroupList, errors.illegalInput)),
+    difficulty: yup
+    .string()
+    .oneOf(validDifficulty, errors.illegalInput),
     min_duration: yup.number().moreThan(0),
     page: yup.number().moreThan(0),
     limit: yup.number().moreThan(0)

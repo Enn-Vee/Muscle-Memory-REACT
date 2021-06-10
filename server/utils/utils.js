@@ -39,7 +39,9 @@ exports.getFilters = (query) => {
                 filters += " OR target_muscle = ";
             filters += mysql.escape(muscle)
         })
-    }   
+    }
+    if(query.difficulty)
+        filters += " AND difficulty =" + mysql.escape(query.difficulty)
     return filters;
 }
 
@@ -52,7 +54,7 @@ exports.getSortOptions = (query) => {
     let sortOption = "";
     if(query.sort)
         sortOption += " ORDER BY " + mysql.escapeId(query.sort);
-    if(query.order)
+    if(query.order === "desc")
         sortOption += " DESC" 
     return sortOption;
 }
@@ -73,4 +75,18 @@ exports.getPage = (query) => {
         }
     }
     return pagination;
+}
+
+/**
+ * Capitalizes first character for every word in the string.
+ * @param {*} string 
+ * @returns 
+ */
+exports.capitalizeFirstChar = (string) => {
+    let wordArr = string.split(' ');
+    wordArr = wordArr.map(word => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    wordArr = wordArr.join(' ');
+    return wordArr;
 }

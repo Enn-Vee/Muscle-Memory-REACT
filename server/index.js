@@ -4,7 +4,7 @@ dotenv.config({path: './.env'});
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
-const passport = require('passport')
+const passport = require('passport');
 
 /* MIDDLEWARE */
 require('./configs/passport-config.js');

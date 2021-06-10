@@ -10,7 +10,7 @@ module.exports = passport => {
 
     router.get('/', validate.query(exerciseSchema.exerciseParameterSchema), exercises.getAll);
     router.get('/:id/likes', exercises.getNumLikes)
-    router.post('/', validate.body(exerciseSchema.exerciseSchema), exercises.createExercise)
+    router.post('/', authenticate(passport) ,validate.body(exerciseSchema.exerciseSchema), exercises.createExercise)
     router.get('/user/:username', exercises.getByUser)
     router.get('/:title', exercises.getByTitle)
     router.post('/:id/like', authenticate(passport), exercises.like)

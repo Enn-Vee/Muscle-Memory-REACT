@@ -7,13 +7,14 @@ const utils = require('../utils/utils.js');
  */
 const Exercise = function(exercise) {
     this.author_id = exercise.author_id;
-    this.title = exercise.title;
+    this.title = utils.capitalizeFirstChar(exercise.title);
     this.target_muscle = exercise.target_muscle;
     this.description = exercise.description;
     this.sets = exercise.sets;
     this.reps = exercise.reps;
     this.duration = exercise.duration;
     this.video_id = utils.getVideoID(exercise.video_url); //Parses the URL for the youtube video ID.
+    this.difficulty = utils.capitalizeFirstChar(exercise.difficulty);
 }
 
 /**
@@ -22,8 +23,8 @@ const Exercise = function(exercise) {
  * @param {Function} result
  */
 Exercise.createExercise = (newExercise, result) => {
-    db.query(`INSERT INTO exercises (author_id, title, target_muscle, description, sets, reps, duration, video_id) VALUES(?,?,?,?,?,?,?,?)`,
-    [newExercise.author_id, newExercise.title, newExercise.target_muscle, newExercise.description, newExercise.sets, newExercise.reps, newExercise.duration, newExercise.video_id],
+    db.query(`INSERT INTO exercises (author_id, title, target_muscle, description, sets, reps, duration, video_id, difficulty) VALUES(?,?,?,?,?,?,?,?,?)`,
+    [newExercise.author_id, newExercise.title, newExercise.target_muscle, newExercise.description, newExercise.sets, newExercise.reps, newExercise.duration, newExercise.video_id, newExercise.difficulty],
     (error, res) => {
         if(error) {
             console.log(error)
@@ -43,11 +44,12 @@ Exercise.createExercise = (newExercise, result) => {
  */
 Exercise.getAll = (sortOption, filters, pagination, result) => {
     let query = "SELECT\
-    exercises.created_at,\
     users.username as author,\
+    title, target_muscle,\
+    difficulty,\
+    exercises.created_at,\
     description,\
     exercises.exercise_id,\
-    title, target_muscle,\
     sets, reps, duration,\
     count(exercise_likes.exercise_id) as likes,\
     video_id\
