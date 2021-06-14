@@ -36,6 +36,8 @@
 }
 .card-footer {
   position: absolute;
+  background-color: white;
+  border: 0px solid;
   bottom: 0;
   height: 2.8rem;
   width: 100%;

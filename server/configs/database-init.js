@@ -35,16 +35,19 @@ db.connect(error => {
 });
 
 const createUserTable = () => {
+    
+      
     let createUserTableQuery = "CREATE TABLE `users` (\
         `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,\
         `username` varchar(12) NOT NULL,\
         `password` varchar(500) NOT NULL,\
-        `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\
+        `created_at` datetime NOT NULL DEFAULT current_timestamp(),\
         `email` varchar(255) NOT NULL,\
+        `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\
         PRIMARY KEY (`user_id`),\
         UNIQUE KEY `username_UNIQUE` (`username`),\
         UNIQUE KEY `email_UNIQUE` (`email`)\
-      ) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4;";
+      ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4";
       db.query(createUserTableQuery, (error, results) => {
         if(error)
             console.log(error.sqlMessage);
@@ -63,14 +66,15 @@ const createExerciseTable = () => {
         `video_id` varchar(11) NOT NULL,\
         `target_muscle` varchar(20) NOT NULL,\
         `duration` int(10) unsigned NOT NULL,\
-        `likes` int(10) NOT NULL DEFAULT 0,\
-        `created_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\
+        `created_at` datetime NOT NULL DEFAULT current_timestamp(),\
         `author_id` int(10) unsigned NOT NULL,\
+        `difficulty` enum('Very Easy','Easy','Medium','Hard','Very Hard') NOT NULL,\
+        `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\
         PRIMARY KEY (`exercise_id`),\
         UNIQUE KEY `title_UNIQUE` (`title`),\
         KEY `author_id_idx` (`author_id`),\
         CONSTRAINT `author_id` FOREIGN KEY (`author_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION\
-        ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;";
+      ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4";
     db.query(createExerciseTableQuery, (error, result) => {
         if(error)
             console.log(error.sqlMessage)
@@ -89,7 +93,7 @@ const createLikesTable = () => {
         KEY `exercise_id_idx` (`exercise_id`),\
         CONSTRAINT `exercise_id` FOREIGN KEY (`exercise_id`) REFERENCES `exercises` (`exercise_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,\
         CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION\
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 
     db.query(createLikesTableQuery, (error, result) => {
         if(error)

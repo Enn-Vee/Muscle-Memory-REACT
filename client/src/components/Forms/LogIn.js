@@ -9,27 +9,12 @@ import FormField from "./FormField";
 import {logInSchema} from "../../validations/LogInValidation"
 
 function LogIn() {
-  const { user, fetchUser } = useContext(UserContext);
+  const { user, fetchUser, logIn } = useContext(UserContext);
 
   useEffect(() => {
     document.title="Muscle Memory | Log In"
   },[])
 
-  const logIn = async (info) => {
-    await axios
-      .post("http://localhost:3001/logIn", info, {
-          //"Access-Control-Allow-Origin": true,
-          withCredentials:true
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        fetchUser();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   return (
     <>
       {!user ?
@@ -57,7 +42,7 @@ function LogIn() {
               </Form>
             </div>
           </Formik>
-        </div> : <Redirect to="/" />}
+        </div> : <Redirect to="/main" />}
     </>
   );
 }

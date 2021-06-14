@@ -3,8 +3,6 @@ import './Exercises.css'
 import LikeButton from './LikeButton'
 
 const colorBadges = (difficulty) => {
-    console.log(difficulty)
-
     if(difficulty.includes('Easy'))
         return "bg-success"
     else if(difficulty.includes('Medium'))

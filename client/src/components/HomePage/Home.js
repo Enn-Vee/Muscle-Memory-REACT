@@ -35,13 +35,7 @@ function Home() {
                     
 
                 </div>
-            </section>
-            <section id="about" className="text-center">
-                <div className="">
-                    <h1><i className="fas fa-dumbbell"></i>What is Muscle Memory?<i className="fas fa-dumbbell"></i></h1>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tenetur dolore eaque exercitationem possimus aperiam facilis dignissimos quia, illum similique? Veniam.</p>
-                </div>
-            </section>            
+            </section>     
         </div>
     )
 }

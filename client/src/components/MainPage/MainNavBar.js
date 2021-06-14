@@ -5,8 +5,7 @@ import '../NavBar.css'
 
 function MainNavBar() {
 
-    const {user} = useContext(UserContext);
-
+    const {user, logOut} = useContext(UserContext);
     return (
         <nav id="navbar" className="navbar navbar-expand-lg navbar-light container">
             <Link to={{pathname: "/home"}} className="navbar-brand">Muscle Memory</Link>
@@ -15,18 +14,27 @@ function MainNavBar() {
             </button>
             <div id="links" className="collapse navbar-collapse">
                 <ul className="navbar-nav ms-auto">
-                    <li key="log-in" className="nav-item active mx-2">
-                        <a href="#about" id="about-link" className="nav-link">About</a>
-                    </li>
-                    <li key="Reasons" className="nav-item mx-2">
-                        <Link to={{pathname: "/register"}} id="reasons-link" className="nav-link">Reasons</Link>
-                    </li>
-                    <li key="Features" className="nav-item mx-2">
-                        <Link to={{pathname: "/register"}} id="features-link" className="nav-link">Features</Link>
-                    </li>
-                    <li key="Contact Me" className="nav-item mx-2">
-                        <Link to={{pathname: "/register"}} id="contacts-link" className="nav-link">Contact Me</Link>
-                    </li>
+                    {!user ? 
+                    <>
+                        <li className="nav-item mx-2">
+                            <Link to={{pathname: "/register"}} className="nav-link">Sign Up</Link>
+                        </li>
+                        <li className="nav-item mx-2">
+                            <Link to={{pathname: "/login"}} className="nav-link">Log In</Link>  
+                        </li>
+                    </>
+                    : 
+                    <>
+                        <li className="nav-item mx-2">
+                            <p className="nav-link nav-greeting">
+                                Welcome, {user.username}!
+                            </p>
+                        </li>
+                        <li className="nav-item mx-2">
+                            <button type="button" className="nav-link nav-button" onClick={logOut}>Sign Out</button>  
+                        </li>
+                    </>
+                    }
                 </ul>
             </div>
         </nav>

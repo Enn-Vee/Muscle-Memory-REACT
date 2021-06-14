@@ -7,7 +7,7 @@ const errors = {
     shortTitle: 'Title must have a minimum of 4 characters',
     longTitle: 'Title must have a maximum of 32 characters.',
     noTitle: 'Please enter the name of the exercise.',
-    shortDescription: 'Description too short. Must be a minimum of 64 characters',
+    shortDescription: 'Description too short. Must be a minimum of 12 characters',
     longDescription: 'Maximum characters allowed is 1024 characters.',
     noDescription: 'Please describe the exercise.',
     illegalInput: 'Please don\'t be cheeky.',
@@ -55,7 +55,7 @@ const exerciseSchema = yup.object().shape({
     //Description must have a minimum of 64 characters and a maximum of 1028.
     description: yup
     .string()
-    .min(64, errors.shortDescription)
+    .min(12, errors.shortDescription)
     .max(1028, errors.longDescription)
     .required(errors.noDescription),
     //Number of sets cannot be lesser than 1.

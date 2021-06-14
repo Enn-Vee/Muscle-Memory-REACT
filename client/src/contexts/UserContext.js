@@ -5,14 +5,32 @@ export const UserContext = React.createContext();
 
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
+    const [isUserLoading, setIsUserLoading] = useState(false);
 
-    const  fetchUser = async () => {
+    const logIn = async (info) => {
+
+        await axios
+          .post("http://localhost:3001/logIn", info, {
+              withCredentials:true
+            }
+          )
+          .then((res) => {
+            fetchUser();
+            
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+    const fetchUser = async () => {
         try {
+            setIsUserLoading(true);
             let userInfo = await axios.get('http://localhost:3001/users/currentUser', {
-                //"Access-Control-Allow-Origin": true,
                 withCredentials:true
-            });
+            });  
             setUser(userInfo.data);
+            setIsUserLoading(false);
         }
         catch(err) {
             console.log(err);
@@ -24,7 +42,6 @@ export function UserProvider({ children }) {
             withCredentials: true
         })
         .then(res => {
-            console.log(res)
             fetchUser();
         })
         .catch(err => {
@@ -36,7 +53,7 @@ export function UserProvider({ children }) {
         fetchUser();
     }, [])
 
-    const value = { user, fetchUser, logOut }
+    const value = { user, fetchUser, logIn, logOut }
 
     return (
         <UserContext.Provider value={value}>
